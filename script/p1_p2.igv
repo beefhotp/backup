@@ -1,0 +1,8 @@
+new
+genome ../demo-data/2R.chr
+load ../map_pop/pop1_sorted.bam
+load ../map_pop/pop2_sorted.bam
+load ../map_allele_freq/p1_p2.fst
+snapshotDirectory ../IGV_dir/
+snapshot
+exit

@@ -1,0 +1,18 @@
+# second step
+
+#!/bin/bash
+
+#$ -N remove_ambiguously_mapped_reads
+#$ -cwd
+#$ -l h_vmem=16G
+
+#initiate the environment
+
+. /etc/profile.d/modules.sh
+
+module load roslin/samtools/1.9
+
+samtools view -q 20 -bS ../map/SRR_maped.sam | samtools sort -o ../map/mapped.sort.bam
+samtools mpileup mapped.sort.bam > mapped.pileup
+#$ -e remove.e
+

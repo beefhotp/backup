@@ -1,0 +1,7 @@
+# Configuration files for reference
+---
+reference:
+    dna: ../../ref/GCF_905115235.1_iHerIll2.2.curated.20191125_genomic.fna
+
+chromosomes:
+    1 2 3 4 5 6 7 MT

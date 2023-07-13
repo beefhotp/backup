@@ -1,0 +1,11 @@
+# Environment for mpileup subworkflow
+name: mpileup
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - samtools
+    - python>=3
+    - perl
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/mpileup

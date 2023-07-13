@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#$ -N make_IGV_file
+#$ -cwd
+#$ -e IGV.e
+#$ -l h_vmem=8G
+
+# Initialise the environment modules
+. /etc/profile.d/modules.sh
+
+module load roslin/perl/5.28.0
+# module load roslin/samtools/1.9
+
+# samtools index ../map_pop/pop1_sorted.bam
+# samtools index ../map_pop/pop2_sorted.bam
+
+# mkdir ../IGV_dir
+# convert Fst result to .igv file
+# perl ../popoolation2_1201/export/pwc2igv.pl --input ../map_allele_freq/p1_p2.fst --output ../IGV_dir/p1_p2.igv
+
+# estimate the significant of allele frequency differences
+perl ../popoolation2_1201/fisher-test.pl --input ../map_allele_freq/p1_p2.sync --output ../map_allele_freq/p1_p2.fet --min-count 6 --min-coverage 50 --max-coverage 200 --suppress-noninformative
+
+# convert FET file into .igv
+perl ../popoolation2_1201/export/pwc2igv.pl --input ../map_allele_freq/p1_p2.fet --output ../map_allele_freq/p1_p2_fet.igv
+

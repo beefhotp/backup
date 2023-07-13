@@ -1,0 +1,3 @@
+population	library	pool_size	max_coverage	forward	reverse	adapt-or	pored
+Just_Fly	lib1	50	200	../../sequence/Just_Fly1/Just_Fly_1.fastq.gz	../../sequence/Just_Fly1/Just_Fly_2.fastq.gz		phred33
+Hiper_Fly	lib1	50	200	../../sequence/Hiper_Fly1/Hiper_Fly_2.fastq.gz	../../sequence/Hiper_Fly1/Hiper_Fly_2.fastq.gz		phred33

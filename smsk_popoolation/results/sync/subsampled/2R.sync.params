@@ -1,0 +1,7 @@
+Using input	results/sync/mpileup2sync/2R.sync
+Using output	results/sync/subsampled/2R.sync
+Using maximum coverage	200,200
+Using subsample method	withoutreplace
+Using target coverage	10
+Using test	0
+Using help	0

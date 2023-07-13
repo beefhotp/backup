@@ -1,0 +1,6 @@
+Using input	/dev/fd/63
+Using output	results/mpileup/filt/pop2/pop2.2R.gtf
+Using indel-window	5
+Using min-count	2
+Using test	0
+Using help	0

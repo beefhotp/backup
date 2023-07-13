@@ -1,0 +1,68 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+decompress                                 2              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             2              1              1
+index_cram                                 3              1              1
+index_fasta                                1              1              1
+map_bwa_index                              1              1              1
+map_bwa_map                                3              1              1
+map_filter                                 3              1              1
+map_split                                  3              1              1
+mpileup_convert                            2              1              1
+mpileup_popoolation_filter_indels          2              1              1
+mpileup_popoolation_identify_indels        2              1              1
+mpileup_popoolation_subsample              2              1              1
+popoolation_merge_snps                     2              1              1
+popoolation_merge_variance_sliding         6              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               6              1              1
+qc_trimmomatic                             3              1              1
+raw_extract_genome                         1              1              1
+raw_make_links_pe                          2              1              1
+reports_samtools_flagstat                  3              1              1
+reports_samtools_idxstats                  3              1              1
+reports_samtools_stats                     3              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     72              1              1
+
+Select jobs to execute...
+
+[Tue Jul 11 22:59:12 2023]
+rule qc_trimmomatic:
+    input: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    output: results/qc/pop1.lib1_1.fq, results/qc/pop1.lib1_2.fq, results/qc/pop1.lib1_3.fq, results/qc/pop1.lib1_4.fq
+    log: results/qc/pop1.lib1.trimmomatic_pe.log
+    jobid: 10
+    benchmark: results/qc/pop1.lib1.trimmomatic_pe.json
+    reason: Missing output files: results/qc/pop1.lib1_2.fq, results/qc/pop1.lib1_4.fq, results/qc/pop1.lib1_3.fq, results/qc/pop1.lib1_1.fq
+    wildcards: population=pop1, library=lib1
+    priority: 50
+    resources: tmpdir=/tmp
+
+RuleException in rule qc_trimmomatic in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_pop_diff_pool_seq/popoolation_snakemake/smsk_popoolation/src/snakefiles/qc.py, line 47:
+IndexError: tuple index out of range, when formatting the following:
+
+        trimmomatic PE \
+            -threads {threads} \
+            -{params.phred} \
+            {input.fwd} {input.rev} {output.fwd} {output.fwd_unp} {output.rev} {} \
+            ILLUMINACLIP:{params.adaptor}:2:30:10 \
+            {params.trimmomatic_params} \
+            2> {log} 1>&2
+        

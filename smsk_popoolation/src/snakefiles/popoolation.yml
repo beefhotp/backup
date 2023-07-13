@@ -1,0 +1,14 @@
+# Environment for popoolation subworkflow
+name: popoolation
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - perl
+    - pigz
+    - r-tidyverse
+    - r-argparse
+    - readline
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/popoolation
+

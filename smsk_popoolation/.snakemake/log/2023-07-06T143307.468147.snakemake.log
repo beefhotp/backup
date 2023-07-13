@@ -1,0 +1,3 @@
+SyntaxError in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/qc.py, line 35:
+Unexpected keyword fwd in rule definition (qc.py, line 35)
+  File "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/Snakefile", line 30, in <module>

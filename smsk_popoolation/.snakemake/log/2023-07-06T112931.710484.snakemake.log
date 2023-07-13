@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                   count    min threads    max threads
+------------------  -------  -------------  -------------
+index_fasta               1              1              1
+raw_extract_genome        1              1              1
+total                     2              1              1
+
+Select jobs to execute...
+
+[Thu Jul  6 11:29:33 2023]
+rule raw_extract_genome:
+    input: data/genome/2R.fa.gz
+    output: results/raw/genome.fa
+    log: results/raw/genome.log
+    jobid: 1
+    benchmark: results/raw/genome.json
+    reason: Missing output files: results/raw/genome.fa
+    resources: tmpdir=/tmp
+
+Benchmark: unable to collect cpu and memory benchmark statistics
+[Thu Jul  6 11:29:34 2023]
+Finished job 1.
+1 of 2 steps (50%) done
+Select jobs to execute...
+
+[Thu Jul  6 11:29:34 2023]
+rule index_fasta:
+    input: results/raw/genome.fa
+    output: results/raw/genome.fa.fai
+    jobid: 0
+    reason: Missing output files: results/raw/genome.fa.fai; Input files updated by another job: results/raw/genome.fa
+    wildcards: filename=results/raw/genome.fa
+    resources: tmpdir=/tmp
+
+Activating conda environment: samtools
+[Thu Jul  6 11:29:36 2023]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: .snakemake/log/2023-07-06T112931.710484.snakemake.log

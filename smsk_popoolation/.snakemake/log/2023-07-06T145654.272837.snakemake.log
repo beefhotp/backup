@@ -1,0 +1,118 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+decompress                                 2              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             2              1              1
+index_cram                                 3              1              1
+index_fasta                                1              1              1
+map_bwa_map                                3              1              1
+map_filter                                 3              1              1
+map_split                                  3              1              1
+mpileup_convert                            2              1              1
+mpileup_popoolation_filter_indels          2              1              1
+mpileup_popoolation_identify_indels        2              1              1
+mpileup_popoolation_subsample              2              1              1
+popoolation_merge_snps                     2              1              1
+popoolation_merge_variance_sliding         6              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               6              1              1
+qc_trimmomatic                             2              1              1
+raw_make_links_pe                          2              1              1
+reports_samtools_flagstat                  3              1              1
+reports_samtools_idxstats                  3              1              1
+reports_samtools_stats                     3              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     69              1              1
+
+Select jobs to execute...
+
+[Thu Jul  6 14:57:02 2023]
+rule map_bwa_map:
+    input: results/qc/pop2.lib1_1.fq, results/qc/pop2.lib1_2.fq, results/qc/pop2.lib1_3.fq, results/qc/pop2.lib1_4.fq, results/index/genome, results/raw/genome.fa
+    output: results/map/raw/pop2.lib1.cram
+    log: results/map/raw/pop2.lib1.bwa_mem.log
+    jobid: 33
+    benchmark: results/map/raw/pop2.lib1.bwa_mem.json
+    reason: Missing output files: results/map/raw/pop2.lib1.cram
+    wildcards: population=pop2, library=lib1
+    resources: tmpdir=/tmp
+
+
+        (bwa mem             -M             -R '@RG	ID:pop2_lib1	LB:truseq_lib1	PL:Illumina	SM:pop2'             -t 1                          results/index/genome             results/qc/pop2.lib1_1.fq             results/qc/pop2.lib1_2.fq         | samtools sort             -l 9             -o results/map/raw/pop2.lib1.cram             --reference results/raw/genome.fa             --output-fmt CRAM             -@ 1             /dev/stdin         ) 2> results/map/raw/pop2.lib1.bwa_mem.log
+        
+Activating conda environment: map
+Write-protecting output file results/map/raw/pop2.lib1.cram.
+[Thu Jul  6 14:57:32 2023]
+Finished job 33.
+1 of 69 steps (1%) done
+Removing temporary output results/qc/pop2.lib1_4.fq.
+Removing temporary output results/qc/pop2.lib1_1.fq.
+Removing temporary output results/qc/pop2.lib1_3.fq.
+Removing temporary output results/qc/pop2.lib1_2.fq.
+Select jobs to execute...
+
+[Thu Jul  6 14:57:32 2023]
+rule raw_make_links_pe:
+    input: data/reads/pop1_1.fq.gz, data/reads/pop1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    jobid: 12
+    reason: Missing output files: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    wildcards: population=pop1, library=lib1
+    resources: tmpdir=/tmp
+
+
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_1.fq.gz) results/raw/pop1.lib1_1.fq.gz
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_2.fq.gz) results/raw/pop1.lib1_2.fq.gz
+        
+[Thu Jul  6 14:57:32 2023]
+Finished job 12.
+2 of 69 steps (3%) done
+Select jobs to execute...
+
+[Thu Jul  6 14:57:32 2023]
+rule reports_samtools_flagstat:
+    input: results/map/raw/pop2.lib1.cram
+    output: results/map/raw/pop2.lib1.flagstat.txt
+    log: results/map/raw/pop2.lib1.flagstat.log
+    jobid: 72
+    benchmark: results/map/raw/pop2.lib1.flagstat.bmk
+    reason: Missing output files: results/map/raw/pop2.lib1.flagstat.txt; Input files updated by another job: results/map/raw/pop2.lib1.cram
+    wildcards: filename=results/map/raw/pop2.lib1
+    resources: tmpdir=/tmp
+
+samtools flagstat results/map/raw/pop2.lib1.cram > results/map/raw/pop2.lib1.flagstat.txt 2> results/map/raw/pop2.lib1.flagstat.log
+Activating conda environment: reports
+[Thu Jul  6 14:57:37 2023]
+Finished job 72.
+3 of 69 steps (4%) done
+Select jobs to execute...
+
+[Thu Jul  6 14:57:37 2023]
+rule decompress:
+    input: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    jobid: 11
+    reason: Missing output files: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq; Input files updated by another job: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    wildcards: population=pop1, library=lib1
+    resources: tmpdir=/tmp
+
+RuleException in rule decompress in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/qc.py, line 33:
+NameError: The name 'ourput' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}, when formatting the following:
+
+        gzip --decompress --stdout {input.fwd} > {output.fwd}
+        gzip --decompress --stdout {input.rev} > {ourput.rev}
+        

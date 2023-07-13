@@ -1,0 +1,859 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             1              1              1
+index_cram                                 2              1              1
+map_filter                                 2              1              1
+map_split                                  2              1              1
+mpileup_convert                            1              1              1
+mpileup_popoolation_filter_indels          1              1              1
+mpileup_popoolation_identify_indels        1              1              1
+mpileup_popoolation_subsample              1              1              1
+popoolation_merge_snps                     1              1              1
+popoolation_merge_variance_sliding         5              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               5              1              1
+reports_samtools_idxstats                  2              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     41              1              1
+
+Select jobs to execute...
+
+[Wed Jul 12 01:12:37 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/D/pop2.D.tsv.gz
+    output: results/popoolation/plot/D/pop2.D.pdf
+    log: results/popoolation/plot/D/pop2.D.plot.log
+    jobid: 25
+    benchmark: results/popoolation/plot/D/pop2.D.plot.json
+    reason: Missing output files: results/popoolation/plot/D/pop2.D.pdf
+    wildcards: analysis=D, population=pop2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/D/pop2.D.tsv.gz             --output results/popoolation/plot/D/pop2.D.pdf         2> results/popoolation/plot/D/pop2.D.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop2.D.pdf.
+[Wed Jul 12 01:12:43 2023]
+Finished job 25.
+1 of 41 steps (2%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:12:43 2023]
+rule hp_plot_population:
+    input: results/hp/tables/pop2.tsv.gz
+    output: results/hp/plot/pop2.pdf
+    log: results/hp/plot/pop2.log
+    jobid: 54
+    benchmark: results/hp/plot/pop2.json
+    reason: Missing output files: results/hp/plot/pop2.pdf
+    wildcards: population=pop2
+    resources: tmpdir=/tmp
+
+
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        Rscript src/plot_score.R             --input results/hp/tables/pop2.tsv.gz             --output results/hp/plot/pop2.pdf             --logarithm         2> results/hp/plot/pop2.log
+        
+Activating conda environment: hp
+[Wed Jul 12 01:12:47 2023]
+Finished job 54.
+2 of 41 steps (5%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:12:47 2023]
+rule index_cram:
+    input: results/map/raw/pop1.lib2.cram
+    output: results/map/raw/pop1.lib2.cram.crai
+    jobid: 22
+    reason: Missing output files: results/map/raw/pop1.lib2.cram.crai
+    wildcards: filename=results/map/raw/pop1.lib2
+    resources: tmpdir=/tmp
+
+samtools index results/map/raw/pop1.lib2.cram
+Activating conda environment: generic
+[Wed Jul 12 01:12:47 2023]
+Finished job 22.
+3 of 41 steps (7%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:12:47 2023]
+rule map_split:
+    input: results/map/raw/pop1.lib2.cram, results/map/raw/pop1.lib2.cram.crai, results/raw/genome.fa
+    output: results/map/split/pop1.lib2.2R.bam
+    log: results/map/split/pop1.lib2.2R.log
+    jobid: 17
+    benchmark: results/map/split/pop1.lib2.2R.json
+    reason: Missing output files: results/map/split/pop1.lib2.2R.bam; Input files updated by another job: results/map/raw/pop1.lib2.cram.crai
+    wildcards: population=pop1, library=lib2, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        samtools view             -u             -T results/raw/genome.fa             -o results/map/split/pop1.lib2.2R.bam             results/map/raw/pop1.lib2.cram             2R         2> results/map/split/pop1.lib2.2R.log
+        
+Activating conda environment: map
+[Wed Jul 12 01:12:48 2023]
+Finished job 17.
+4 of 41 steps (10%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:12:48 2023]
+rule map_filter:
+    input: results/map/split/pop1.lib2.2R.bam, results/raw/genome.fa
+    output: results/map/filt/pop1.lib2.2R.cram, results/map/filt/pop1.lib2.2R.dupstats
+    log: results/map/filt/pop1.lib2.2R.log
+    jobid: 16
+    benchmark: results/map/filt/pop1.lib2.2R.json
+    reason: Missing output files: results/map/filt/pop1.lib2.2R.cram; Input files updated by another job: results/map/split/pop1.lib2.2R.bam
+    wildcards: population=pop1, library=lib2, chromosome=2R
+    resources: tmpdir=/tmp, memory_gb=1
+
+
+        (picard -Xmx1g MarkDuplicates             INPUT=results/map/split/pop1.lib2.2R.bam             OUTPUT=/dev/stdout             METRICS_FILE=results/map/filt/pop1.lib2.2R.dupstats             ASSUME_SORT_ORDER=coordinate             VALIDATION_STRINGENCY=SILENT             COMPRESSION_LEVEL=0             REMOVE_DUPLICATES=true             QUIET=false         | samtools view             -q 20             -f 0x0002  `# read mapped in proper pair. Leave only`             -F 0x0004  `# read unmapped. Throw away`             -F 0x0008  `# mate unmapped. Throw away`             -u             -         | samtools sort             -l 9             -o results/map/filt/pop1.lib2.2R.cram             --reference results/raw/genome.fa             --output-fmt CRAM             /dev/stdin         ) 2> results/map/filt/pop1.lib2.2R.log
+        
+Activating conda environment: map
+Write-protecting output file results/map/filt/pop1.lib2.2R.cram.
+[Wed Jul 12 01:13:12 2023]
+Finished job 16.
+5 of 41 steps (12%) done
+Removing temporary output results/map/split/pop1.lib2.2R.bam.
+Select jobs to execute...
+
+[Wed Jul 12 01:13:12 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop2/pop2.2R.mpileup.gz
+    output: results/popoolation/tables/pi/pop2.2R.pi.snps, results/popoolation/tables/pi/pop2.2R.pi.tsv
+    log: results/popoolation/tables/pi/pop2.2R.pi.log
+    jobid: 44
+    benchmark: results/popoolation/tables/pi/pop2.2R.pi.json
+    reason: Missing output files: results/popoolation/tables/pi/pop2.2R.pi.tsv
+    wildcards: analysis=pi, population=pop2, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure pi             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 200             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop2/pop2.2R.mpileup.gz)             --output results/popoolation/tables/pi/pop2.2R.pi.tsv             --snp-output results/popoolation/tables/pi/pop2.2R.pi.snps         2> results/popoolation/tables/pi/pop2.2R.pi.log 1>&2
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:13:20 2023]
+Finished job 44.
+6 of 41 steps (15%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:20 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/pi/pop2.2R.pi.tsv
+    output: results/popoolation/plot/pi/pop2.pi.tsv.gz
+    log: results/popoolation/plot/pi/pop2.pi.merge_vs.log
+    jobid: 43
+    benchmark: results/popoolation/plot/pi/pop2.pi.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/pi/pop2.pi.tsv.gz; Input files updated by another job: results/popoolation/tables/pi/pop2.2R.pi.tsv
+    wildcards: analysis=pi, population=pop2
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/pi/pop2.2R.pi.tsv | pigz --best --processes 1 > results/popoolation/plot/pi/pop2.pi.tsv.gz) 2> results/popoolation/plot/pi/pop2.pi.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/pi/pop2.pi.tsv.gz.
+[Wed Jul 12 01:13:22 2023]
+Finished job 43.
+7 of 41 steps (17%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:22 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/pi/pop2.pi.tsv.gz
+    output: results/popoolation/plot/pi/pop2.pi.pdf
+    log: results/popoolation/plot/pi/pop2.pi.plot.log
+    jobid: 42
+    benchmark: results/popoolation/plot/pi/pop2.pi.plot.json
+    reason: Missing output files: results/popoolation/plot/pi/pop2.pi.pdf; Input files updated by another job: results/popoolation/plot/pi/pop2.pi.tsv.gz
+    wildcards: analysis=pi, population=pop2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/pi/pop2.pi.tsv.gz             --output results/popoolation/plot/pi/pop2.pi.pdf         2> results/popoolation/plot/pi/pop2.pi.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/pi/pop2.pi.pdf.
+[Wed Jul 12 01:13:26 2023]
+Finished job 42.
+8 of 41 steps (20%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:26 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop2/pop2.2R.mpileup.gz
+    output: results/popoolation/tables/theta/pop2.2R.theta.snps, results/popoolation/tables/theta/pop2.2R.theta.tsv
+    log: results/popoolation/tables/theta/pop2.2R.theta.log
+    jobid: 50
+    benchmark: results/popoolation/tables/theta/pop2.2R.theta.json
+    reason: Missing output files: results/popoolation/tables/theta/pop2.2R.theta.tsv; Software environment definition has changed since last execution
+    wildcards: analysis=theta, population=pop2, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure theta             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 200             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop2/pop2.2R.mpileup.gz)             --output results/popoolation/tables/theta/pop2.2R.theta.tsv             --snp-output results/popoolation/tables/theta/pop2.2R.theta.snps         2> results/popoolation/tables/theta/pop2.2R.theta.log 1>&2
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:13:35 2023]
+Finished job 50.
+9 of 41 steps (22%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:35 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/theta/pop2.2R.theta.tsv
+    output: results/popoolation/plot/theta/pop2.theta.tsv.gz
+    log: results/popoolation/plot/theta/pop2.theta.merge_vs.log
+    jobid: 49
+    benchmark: results/popoolation/plot/theta/pop2.theta.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/theta/pop2.theta.tsv.gz; Input files updated by another job: results/popoolation/tables/theta/pop2.2R.theta.tsv
+    wildcards: analysis=theta, population=pop2
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/theta/pop2.2R.theta.tsv | pigz --best --processes 1 > results/popoolation/plot/theta/pop2.theta.tsv.gz) 2> results/popoolation/plot/theta/pop2.theta.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/theta/pop2.theta.tsv.gz.
+[Wed Jul 12 01:13:36 2023]
+Finished job 49.
+10 of 41 steps (24%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:36 2023]
+rule reports_samtools_idxstats:
+    input: results/map/raw/pop1.lib2.cram, results/map/raw/pop1.lib2.cram.crai
+    output: results/map/raw/pop1.lib2.idxstats.txt
+    log: results/map/raw/pop1.lib2.idxstats.log
+    jobid: 70
+    benchmark: results/map/raw/pop1.lib2.idxstats.bmk
+    reason: Missing output files: results/map/raw/pop1.lib2.idxstats.txt; Input files updated by another job: results/map/raw/pop1.lib2.cram.crai
+    wildcards: filename=results/map/raw/pop1.lib2
+    resources: tmpdir=/tmp
+
+samtools idxstats results/map/raw/pop1.lib2.cram > results/map/raw/pop1.lib2.idxstats.txt 2> results/map/raw/pop1.lib2.idxstats.log
+Activating conda environment: reports
+[Wed Jul 12 01:13:38 2023]
+Finished job 70.
+11 of 41 steps (27%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:38 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/theta/pop2.theta.tsv.gz
+    output: results/popoolation/plot/theta/pop2.theta.pdf
+    log: results/popoolation/plot/theta/pop2.theta.plot.log
+    jobid: 48
+    benchmark: results/popoolation/plot/theta/pop2.theta.plot.json
+    reason: Missing output files: results/popoolation/plot/theta/pop2.theta.pdf; Input files updated by another job: results/popoolation/plot/theta/pop2.theta.tsv.gz
+    wildcards: analysis=theta, population=pop2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/theta/pop2.theta.tsv.gz             --output results/popoolation/plot/theta/pop2.theta.pdf         2> results/popoolation/plot/theta/pop2.theta.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/theta/pop2.theta.pdf.
+[Wed Jul 12 01:13:42 2023]
+Finished job 48.
+12 of 41 steps (29%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:42 2023]
+rule index_cram:
+    input: results/map/raw/pop1.lib1.cram
+    output: results/map/raw/pop1.lib1.cram.crai
+    jobid: 15
+    reason: Missing output files: results/map/raw/pop1.lib1.cram.crai
+    wildcards: filename=results/map/raw/pop1.lib1
+    resources: tmpdir=/tmp
+
+samtools index results/map/raw/pop1.lib1.cram
+Activating conda environment: generic
+[Wed Jul 12 01:13:42 2023]
+Finished job 15.
+13 of 41 steps (32%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:42 2023]
+rule map_split:
+    input: results/map/raw/pop1.lib1.cram, results/map/raw/pop1.lib1.cram.crai, results/raw/genome.fa
+    output: results/map/split/pop1.lib1.2R.bam
+    log: results/map/split/pop1.lib1.2R.log
+    jobid: 8
+    benchmark: results/map/split/pop1.lib1.2R.json
+    reason: Missing output files: results/map/split/pop1.lib1.2R.bam; Input files updated by another job: results/map/raw/pop1.lib1.cram.crai
+    wildcards: population=pop1, library=lib1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        samtools view             -u             -T results/raw/genome.fa             -o results/map/split/pop1.lib1.2R.bam             results/map/raw/pop1.lib1.cram             2R         2> results/map/split/pop1.lib1.2R.log
+        
+Activating conda environment: map
+[Wed Jul 12 01:13:43 2023]
+Finished job 8.
+14 of 41 steps (34%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:13:43 2023]
+rule map_filter:
+    input: results/map/split/pop1.lib1.2R.bam, results/raw/genome.fa
+    output: results/map/filt/pop1.lib1.2R.cram, results/map/filt/pop1.lib1.2R.dupstats
+    log: results/map/filt/pop1.lib1.2R.log
+    jobid: 7
+    benchmark: results/map/filt/pop1.lib1.2R.json
+    reason: Missing output files: results/map/filt/pop1.lib1.2R.cram; Input files updated by another job: results/map/split/pop1.lib1.2R.bam
+    wildcards: population=pop1, library=lib1, chromosome=2R
+    resources: tmpdir=/tmp, memory_gb=1
+
+
+        (picard -Xmx1g MarkDuplicates             INPUT=results/map/split/pop1.lib1.2R.bam             OUTPUT=/dev/stdout             METRICS_FILE=results/map/filt/pop1.lib1.2R.dupstats             ASSUME_SORT_ORDER=coordinate             VALIDATION_STRINGENCY=SILENT             COMPRESSION_LEVEL=0             REMOVE_DUPLICATES=true             QUIET=false         | samtools view             -q 20             -f 0x0002  `# read mapped in proper pair. Leave only`             -F 0x0004  `# read unmapped. Throw away`             -F 0x0008  `# mate unmapped. Throw away`             -u             -         | samtools sort             -l 9             -o results/map/filt/pop1.lib1.2R.cram             --reference results/raw/genome.fa             --output-fmt CRAM             /dev/stdin         ) 2> results/map/filt/pop1.lib1.2R.log
+        
+Activating conda environment: map
+Write-protecting output file results/map/filt/pop1.lib1.2R.cram.
+[Wed Jul 12 01:14:06 2023]
+Finished job 7.
+15 of 41 steps (37%) done
+Removing temporary output results/map/split/pop1.lib1.2R.bam.
+Select jobs to execute...
+
+[Wed Jul 12 01:14:06 2023]
+rule mpileup_convert:
+    input: results/map/filt/pop1.lib1.2R.cram, results/map/filt/pop1.lib2.2R.cram, results/raw/genome.fa, results/raw/genome.fa.fai
+    output: results/mpileup/raw/pop1/pop1.2R.mpileup.gz
+    log: results/mpileup/raw/pop1/pop1.2R.log
+    jobid: 6
+    benchmark: results/mpileup/raw/pop1/pop1.2R.json
+    reason: Missing output files: results/mpileup/raw/pop1/pop1.2R.mpileup.gz; Input files updated by another job: results/map/filt/pop1.lib1.2R.cram, results/map/filt/pop1.lib2.2R.cram; Software environment definition has changed since last execution
+    wildcards: population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        (samtools merge             -u             --reference results/raw/genome.fa             -             results/map/filt/pop1.lib1.2R.cram results/map/filt/pop1.lib2.2R.cram         | samtools mpileup             -a             --no-BAQ             --min-BQ 0             --fasta-ref results/raw/genome.fa             -         | gzip             --best         > results/mpileup/raw/pop1/pop1.2R.mpileup.gz         ) 2> results/mpileup/raw/pop1/pop1.2R.log
+        
+Activating conda environment: mpileup
+[Wed Jul 12 01:14:32 2023]
+Finished job 6.
+16 of 41 steps (39%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:14:32 2023]
+rule reports_samtools_idxstats:
+    input: results/map/raw/pop1.lib1.cram, results/map/raw/pop1.lib1.cram.crai
+    output: results/map/raw/pop1.lib1.idxstats.txt
+    log: results/map/raw/pop1.lib1.idxstats.log
+    jobid: 67
+    benchmark: results/map/raw/pop1.lib1.idxstats.bmk
+    reason: Missing output files: results/map/raw/pop1.lib1.idxstats.txt; Input files updated by another job: results/map/raw/pop1.lib1.cram.crai
+    wildcards: filename=results/map/raw/pop1.lib1
+    resources: tmpdir=/tmp
+
+samtools idxstats results/map/raw/pop1.lib1.cram > results/map/raw/pop1.lib1.idxstats.txt 2> results/map/raw/pop1.lib1.idxstats.log
+Activating conda environment: reports
+[Wed Jul 12 01:14:33 2023]
+Finished job 67.
+17 of 41 steps (41%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:14:33 2023]
+rule sync_identify_indels:
+    input: results/mpileup/raw/pop1/pop1.2R.mpileup.gz, results/mpileup/raw/pop2/pop2.2R.mpileup.gz
+    output: results/sync/filt/2R.gtf
+    log: results/sync/filt/2R.identify_indels.log
+    jobid: 64
+    benchmark: results/sync/filt/2R.identify_indels.bmk
+    reason: Missing output files: results/sync/filt/2R.gtf; Input files updated by another job: results/mpileup/raw/pop1/pop1.2R.mpileup.gz
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        (eval             paste <(gzip -dc results/mpileup/raw/pop1/pop1.2R.mpileup.gz | cut -f 1-3)             '<(gzip -dc '{results/mpileup/raw/pop1/pop1.2R.mpileup.gz,results/mpileup/raw/pop2/pop2.2R.mpileup.gz}' | cut -f 4-6 )'         | perl src/popoolation2_1201/indel_filtering/identify-indel-regions.pl             --input /dev/stdin             --output results/sync/filt/2R.gtf             --indel-window 5             --min-count 5)         2> results/sync/filt/2R.identify_indels.log 1>&2
+        
+Activating conda environment: sync
+[Wed Jul 12 01:14:42 2023]
+Finished job 64.
+18 of 41 steps (44%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:14:42 2023]
+rule sync_filter_indels:
+    input: results/mpileup/raw/pop1/pop1.2R.mpileup.gz, results/mpileup/raw/pop2/pop2.2R.mpileup.gz, results/sync/filt/2R.gtf
+    output: results/sync/filt/2R.mpileup, results/sync/filt/2R.mpileup.gz
+    log: results/sync/filt/2R.filter_indels.log
+    jobid: 63
+    benchmark: results/sync/filt/2R.filter_indels.bmk
+    reason: Missing output files: results/sync/filt/2R.mpileup.gz; Input files updated by another job: results/mpileup/raw/pop1/pop1.2R.mpileup.gz, results/sync/filt/2R.gtf
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        mkfifo results/sync/filt/2R.mpileup
+
+        (cat results/sync/filt/2R.mpileup | gzip --fast > results/sync/filt/2R.mpileup.gz &)
+
+        (eval             paste <(gzip -dc results/mpileup/raw/pop1/pop1.2R.mpileup.gz | cut -f 1-3)             '<(gzip -dc '{results/mpileup/raw/pop1/pop1.2R.mpileup.gz,results/mpileup/raw/pop2/pop2.2R.mpileup.gz}' | cut -f 4-6 )'         | perl src/popoolation2_1201/indel_filtering/filter-sync-by-gtf.pl             --input /dev/stdin             --gtf results/sync/filt/2R.gtf             --output results/sync/filt/2R.mpileup)         2> results/sync/filt/2R.filter_indels.log 1>&2
+        
+Activating conda environment: sync
+[Wed Jul 12 01:14:52 2023]
+Finished job 63.
+19 of 41 steps (46%) done
+Removing temporary output results/sync/filt/2R.gtf.
+Removing temporary output results/sync/filt/2R.mpileup.
+Select jobs to execute...
+
+[Wed Jul 12 01:14:52 2023]
+rule sync_mpileup2sync:
+    input: results/sync/filt/2R.mpileup.gz
+    output: results/sync/mpileup2sync/2R.sync
+    log: results/sync/mpileup2sync/2R.log
+    jobid: 62
+    benchmark: results/sync/mpileup2sync/2R.json
+    reason: Missing output files: results/sync/mpileup2sync/2R.sync; Input files updated by another job: results/sync/filt/2R.mpileup.gz
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp, memory_gb=2
+
+
+        (gzip --decompress --stdout results/sync/filt/2R.mpileup.gz         | java -Xmx2g -jar src/popoolation2_1201/mpileup2sync.jar             --input /dev/stdin             --output results/sync/mpileup2sync/2R.sync             --fastq-type sanger             --min-qual 20             --threads 1         || true)         2> results/sync/mpileup2sync/2R.log 1>&2
+        
+Activating conda environment: sync
+[Wed Jul 12 01:15:00 2023]
+Finished job 62.
+20 of 41 steps (49%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:15:00 2023]
+rule sync_subsample:
+    input: results/sync/mpileup2sync/2R.sync
+    output: results/sync/subsampled/2R.sync
+    log: results/sync/subsampled/2R.log
+    jobid: 61
+    benchmark: results/sync/subsampled/2R.json
+    reason: Missing output files: results/sync/subsampled/2R.sync; Input files updated by another job: results/sync/mpileup2sync/2R.sync
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation2_1201/subsample-synchronized.pl             --input results/sync/mpileup2sync/2R.sync             --output results/sync/subsampled/2R.sync             --target-coverage 10             --max-coverage 200,200             --method withoutreplace         2> results/sync/subsampled/2R.log 1>&2
+        
+Activating conda environment: sync
+[Wed Jul 12 01:15:19 2023]
+Finished job 61.
+21 of 41 steps (51%) done
+Removing temporary output results/sync/mpileup2sync/2R.sync.
+Select jobs to execute...
+
+[Wed Jul 12 01:15:19 2023]
+rule fst_sliding:
+    input: results/sync/subsampled/2R.sync
+    output: results/fst/tables/2R.tsv, results/fst/tables/2R.tsv.gz
+    log: results/fst/tables/2R.log
+    jobid: 60
+    benchmark: results/fst/tables/2R.json
+    reason: Missing output files: results/fst/tables/2R.tsv; Input files updated by another job: results/sync/subsampled/2R.sync
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation2_1201/fst-sliding.pl             --window-size 1             --step-size 1             --suppress-noninformative             --input results/sync/subsampled/2R.sync             --min-covered-fraction 1.0             --min-coverage 4             --max-coverage 200             --min-count 3             --output results/fst/tables/2R.tsv             --pool-size 500:200         2> results/fst/tables/2R.log 1>&2
+        gzip --best --stdout results/fst/tables/2R.tsv > results/fst/tables/2R.tsv.gz 2>> results/fst/tables/2R.log
+        
+Activating conda environment: fst
+Write-protecting output file results/fst/tables/2R.tsv.gz.
+[Wed Jul 12 01:15:43 2023]
+Finished job 60.
+22 of 41 steps (54%) done
+Removing temporary output results/sync/subsampled/2R.sync.
+Select jobs to execute...
+
+[Wed Jul 12 01:15:43 2023]
+rule fst_merge:
+    input: results/fst/tables/2R.tsv
+    output: results/fst/plot/all.tsv.gz
+    log: results/fst/plot/merge.log
+    jobid: 59
+    benchmark: results/fst/plot/merge.json
+    reason: Missing output files: results/fst/plot/all.tsv.gz; Input files updated by another job: results/fst/tables/2R.tsv
+    resources: tmpdir=/tmp
+
+pigz --best --stdout results/fst/tables/2R.tsv > results/fst/plot/all.tsv.gz
+Activating conda environment: fst
+Write-protecting output file results/fst/plot/all.tsv.gz.
+[Wed Jul 12 01:15:44 2023]
+Finished job 59.
+23 of 41 steps (56%) done
+Removing temporary output results/fst/tables/2R.tsv.
+Select jobs to execute...
+
+[Wed Jul 12 01:15:44 2023]
+rule mpileup_popoolation_identify_indels:
+    input: results/mpileup/raw/pop1/pop1.2R.mpileup.gz
+    output: results/mpileup/filt/pop1/pop1.2R.gtf
+    log: results/mpileup/filt/pop1/pop1.2R.gtf.log
+    jobid: 24
+    benchmark: results/mpileup/filt/pop1/pop1.2R.gtf.json
+    reason: Missing output files: results/mpileup/filt/pop1/pop1.2R.gtf; Input files updated by another job: results/mpileup/raw/pop1/pop1.2R.mpileup.gz
+    wildcards: population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/basic-pipeline/identify-genomic-indel-regions.pl             --input <(gzip --decompress --stdout results/mpileup/raw/pop1/pop1.2R.mpileup.gz)             --output results/mpileup/filt/pop1/pop1.2R.gtf             --indel-window 5             --min-count 2         2>results/mpileup/filt/pop1/pop1.2R.gtf.log 1>&2
+        
+Activating conda environment: mpileup
+[Wed Jul 12 01:15:47 2023]
+Finished job 24.
+24 of 41 steps (59%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:15:47 2023]
+rule mpileup_popoolation_filter_indels:
+    input: results/mpileup/raw/pop1/pop1.2R.mpileup.gz, results/mpileup/filt/pop1/pop1.2R.gtf
+    output: results/mpileup/filt/pop1/pop1.2R.mpileup, results/mpileup/filt/pop1/pop1.2R.mpileup.gz
+    log: results/mpileup/filt/pop1/pop1.2R.mpileup.log
+    jobid: 5
+    benchmark: results/mpileup/filt/pop1/pop1.2R.mpileup.json
+    reason: Missing output files: results/mpileup/filt/pop1/pop1.2R.mpileup.gz; Input files updated by another job: results/mpileup/filt/pop1/pop1.2R.gtf, results/mpileup/raw/pop1/pop1.2R.mpileup.gz
+    wildcards: population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        mkfifo results/mpileup/filt/pop1/pop1.2R.mpileup
+
+        (cat results/mpileup/filt/pop1/pop1.2R.mpileup | gzip --fast > results/mpileup/filt/pop1/pop1.2R.mpileup.gz &)
+
+        perl src/popoolation_1.2.2/basic-pipeline/filter-pileup-by-gtf.pl             --input <(gzip --decompress --stdout results/mpileup/raw/pop1/pop1.2R.mpileup.gz)             --gtf results/mpileup/filt/pop1/pop1.2R.gtf             --output results/mpileup/filt/pop1/pop1.2R.mpileup         2> results/mpileup/filt/pop1/pop1.2R.mpileup.log 1>&2
+        
+Activating conda environment: mpileup
+[Wed Jul 12 01:15:51 2023]
+Finished job 5.
+25 of 41 steps (61%) done
+Removing temporary output results/mpileup/filt/pop1/pop1.2R.gtf.
+Removing temporary output results/mpileup/filt/pop1/pop1.2R.mpileup.
+Select jobs to execute...
+
+[Wed Jul 12 01:15:51 2023]
+rule mpileup_popoolation_subsample:
+    input: results/mpileup/filt/pop1/pop1.2R.mpileup.gz
+    output: results/mpileup/sub/pop1/pop1.2R.mpileup, results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    log: results/mpileup/sub/pop1/pop1.2R.log
+    jobid: 4
+    benchmark: results/mpileup/sub/pop1/pop1.2R.json
+    reason: Missing output files: results/mpileup/sub/pop1/pop1.2R.mpileup.gz; Input files updated by another job: results/mpileup/filt/pop1/pop1.2R.mpileup.gz
+    wildcards: population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        mkfifo results/mpileup/sub/pop1/pop1.2R.mpileup;
+
+        (cat results/mpileup/sub/pop1/pop1.2R.mpileup | gzip --best > results/mpileup/sub/pop1/pop1.2R.mpileup.gz &)
+
+        perl src/popoolation_1.2.2/basic-pipeline/subsample-pileup.pl             --min-qual 20             --method withoutreplace             --max-coverage 200             --fastq-type sanger             --target-coverage 10             --input <(gzip -dc results/mpileup/filt/pop1/pop1.2R.mpileup.gz)             --output results/mpileup/sub/pop1/pop1.2R.mpileup         2> results/mpileup/sub/pop1/pop1.2R.log 1>&2
+        
+Activating conda environment: mpileup
+Write-protecting output file results/mpileup/sub/pop1/pop1.2R.mpileup.gz.
+[Wed Jul 12 01:17:30 2023]
+Finished job 4.
+26 of 41 steps (63%) done
+Removing temporary output results/mpileup/filt/pop1/pop1.2R.mpileup.gz.
+Removing temporary output results/mpileup/sub/pop1/pop1.2R.mpileup.
+Select jobs to execute...
+
+[Wed Jul 12 01:17:30 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    output: results/popoolation/tables/theta/pop1.2R.theta.snps, results/popoolation/tables/theta/pop1.2R.theta.tsv
+    log: results/popoolation/tables/theta/pop1.2R.theta.log
+    jobid: 47
+    benchmark: results/popoolation/tables/theta/pop1.2R.theta.json
+    reason: Missing output files: results/popoolation/tables/theta/pop1.2R.theta.tsv; Input files updated by another job: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    wildcards: analysis=theta, population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure theta             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 500             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop1/pop1.2R.mpileup.gz)             --output results/popoolation/tables/theta/pop1.2R.theta.tsv             --snp-output results/popoolation/tables/theta/pop1.2R.theta.snps         2> results/popoolation/tables/theta/pop1.2R.theta.log 1>&2
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:17:38 2023]
+Finished job 47.
+27 of 41 steps (66%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:17:38 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    output: results/popoolation/tables/pi/pop1.2R.pi.snps, results/popoolation/tables/pi/pop1.2R.pi.tsv
+    log: results/popoolation/tables/pi/pop1.2R.pi.log
+    jobid: 41
+    benchmark: results/popoolation/tables/pi/pop1.2R.pi.json
+    reason: Missing output files: results/popoolation/tables/pi/pop1.2R.pi.tsv; Input files updated by another job: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    wildcards: analysis=pi, population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure pi             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 500             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop1/pop1.2R.mpileup.gz)             --output results/popoolation/tables/pi/pop1.2R.pi.tsv             --snp-output results/popoolation/tables/pi/pop1.2R.pi.snps         2> results/popoolation/tables/pi/pop1.2R.pi.log 1>&2
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:17:46 2023]
+Finished job 41.
+28 of 41 steps (68%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:17:46 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/theta/pop1.2R.theta.tsv
+    output: results/popoolation/plot/theta/pop1.theta.tsv.gz
+    log: results/popoolation/plot/theta/pop1.theta.merge_vs.log
+    jobid: 46
+    benchmark: results/popoolation/plot/theta/pop1.theta.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/theta/pop1.theta.tsv.gz; Input files updated by another job: results/popoolation/tables/theta/pop1.2R.theta.tsv
+    wildcards: analysis=theta, population=pop1
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/theta/pop1.2R.theta.tsv | pigz --best --processes 1 > results/popoolation/plot/theta/pop1.theta.tsv.gz) 2> results/popoolation/plot/theta/pop1.theta.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/theta/pop1.theta.tsv.gz.
+[Wed Jul 12 01:17:48 2023]
+Finished job 46.
+29 of 41 steps (71%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:17:48 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/pi/pop1.2R.pi.tsv
+    output: results/popoolation/plot/pi/pop1.pi.tsv.gz
+    log: results/popoolation/plot/pi/pop1.pi.merge_vs.log
+    jobid: 40
+    benchmark: results/popoolation/plot/pi/pop1.pi.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/pi/pop1.pi.tsv.gz; Input files updated by another job: results/popoolation/tables/pi/pop1.2R.pi.tsv
+    wildcards: analysis=pi, population=pop1
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/pi/pop1.2R.pi.tsv | pigz --best --processes 1 > results/popoolation/plot/pi/pop1.pi.tsv.gz) 2> results/popoolation/plot/pi/pop1.pi.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/pi/pop1.pi.tsv.gz.
+[Wed Jul 12 01:17:49 2023]
+Finished job 40.
+30 of 41 steps (73%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:17:49 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/pi/pop1.pi.tsv.gz
+    output: results/popoolation/plot/pi/pop1.pi.pdf
+    log: results/popoolation/plot/pi/pop1.pi.plot.log
+    jobid: 39
+    benchmark: results/popoolation/plot/pi/pop1.pi.plot.json
+    reason: Missing output files: results/popoolation/plot/pi/pop1.pi.pdf; Input files updated by another job: results/popoolation/plot/pi/pop1.pi.tsv.gz
+    wildcards: analysis=pi, population=pop1
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/pi/pop1.pi.tsv.gz             --output results/popoolation/plot/pi/pop1.pi.pdf         2> results/popoolation/plot/pi/pop1.pi.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/pi/pop1.pi.pdf.
+[Wed Jul 12 01:17:54 2023]
+Finished job 39.
+31 of 41 steps (76%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:17:54 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    output: results/popoolation/tables/D/pop1.2R.D.snps, results/popoolation/tables/D/pop1.2R.D.tsv
+    log: results/popoolation/tables/D/pop1.2R.D.log
+    jobid: 3
+    benchmark: results/popoolation/tables/D/pop1.2R.D.json
+    reason: Missing output files: results/popoolation/tables/D/pop1.2R.D.tsv, results/popoolation/tables/D/pop1.2R.D.snps; Input files updated by another job: results/mpileup/sub/pop1/pop1.2R.mpileup.gz
+    wildcards: analysis=D, population=pop1, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure D             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 500             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop1/pop1.2R.mpileup.gz)             --output results/popoolation/tables/D/pop1.2R.D.tsv             --snp-output results/popoolation/tables/D/pop1.2R.D.snps         2> results/popoolation/tables/D/pop1.2R.D.log 1>&2
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:18:02 2023]
+Finished job 3.
+32 of 41 steps (78%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:02 2023]
+rule popoolation_merge_snps:
+    input: results/popoolation/tables/D/pop1.2R.D.snps
+    output: results/popoolation/plot/D/pop1.D.snps.gz
+    jobid: 53
+    reason: Missing output files: results/popoolation/plot/D/pop1.D.snps.gz; Input files updated by another job: results/popoolation/tables/D/pop1.2R.D.snps
+    wildcards: analysis=D, population=pop1
+    resources: tmpdir=/tmp
+
+pigz --processes 1 --best --stdout results/popoolation/tables/D/pop1.2R.D.snps > results/popoolation/plot/D/pop1.D.snps.gz
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop1.D.snps.gz.
+[Wed Jul 12 01:18:04 2023]
+Finished job 53.
+33 of 41 steps (80%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:04 2023]
+rule hp_table_population_chromosome:
+    input: results/popoolation/plot/D/pop1.D.snps.gz
+    output: results/hp/tables/pop1.tsv.gz
+    log: results/hp/tables/pop1.log
+    jobid: 52
+    benchmark: results/hp/tables/pop1.json
+    reason: Missing output files: results/hp/tables/pop1.tsv.gz; Input files updated by another job: results/popoolation/plot/D/pop1.D.snps.gz
+    wildcards: population=pop1
+    resources: tmpdir=/tmp
+
+(gzip --decompress --stdout results/popoolation/plot/D/pop1.D.snps.gz | python3 src/snps_to_hp.py | pigz --best > results/hp/tables/pop1.tsv.gz) 2> results/hp/tables/pop1.log
+Activating conda environment: hp
+Write-protecting output file results/hp/tables/pop1.tsv.gz.
+[Wed Jul 12 01:18:05 2023]
+Finished job 52.
+34 of 41 steps (83%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:05 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/theta/pop1.theta.tsv.gz
+    output: results/popoolation/plot/theta/pop1.theta.pdf
+    log: results/popoolation/plot/theta/pop1.theta.plot.log
+    jobid: 45
+    benchmark: results/popoolation/plot/theta/pop1.theta.plot.json
+    reason: Missing output files: results/popoolation/plot/theta/pop1.theta.pdf; Input files updated by another job: results/popoolation/plot/theta/pop1.theta.tsv.gz
+    wildcards: analysis=theta, population=pop1
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/theta/pop1.theta.tsv.gz             --output results/popoolation/plot/theta/pop1.theta.pdf         2> results/popoolation/plot/theta/pop1.theta.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/theta/pop1.theta.pdf.
+[Wed Jul 12 01:18:10 2023]
+Finished job 45.
+35 of 41 steps (85%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:10 2023]
+rule fst_split_table:
+    input: results/fst/plot/all.tsv.gz
+    output: results/fst/plot/1_2.fst.tsv
+    jobid: 58
+    reason: Missing output files: results/fst/plot/1_2.fst.tsv; Input files updated by another job: results/fst/plot/all.tsv.gz
+    wildcards: pop1=1, pop2=2
+    resources: tmpdir=/tmp
+
+
+        (gzip --decompress --stdout results/fst/plot/all.tsv.gz         | python3 src/fst_to_genomic_score.py             1             2         > results/fst/plot/1_2.fst.tsv)
+        
+Activating conda environment: fst
+[Wed Jul 12 01:18:12 2023]
+Finished job 58.
+36 of 41 steps (88%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:12 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/D/pop1.2R.D.tsv
+    output: results/popoolation/plot/D/pop1.D.tsv.gz
+    log: results/popoolation/plot/D/pop1.D.merge_vs.log
+    jobid: 2
+    benchmark: results/popoolation/plot/D/pop1.D.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/D/pop1.D.tsv.gz; Input files updated by another job: results/popoolation/tables/D/pop1.2R.D.tsv
+    wildcards: analysis=D, population=pop1
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/D/pop1.2R.D.tsv | pigz --best --processes 1 > results/popoolation/plot/D/pop1.D.tsv.gz) 2> results/popoolation/plot/D/pop1.D.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop1.D.tsv.gz.
+[Wed Jul 12 01:18:13 2023]
+Finished job 2.
+37 of 41 steps (90%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:13 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/D/pop1.D.tsv.gz
+    output: results/popoolation/plot/D/pop1.D.pdf
+    log: results/popoolation/plot/D/pop1.D.plot.log
+    jobid: 1
+    benchmark: results/popoolation/plot/D/pop1.D.plot.json
+    reason: Missing output files: results/popoolation/plot/D/pop1.D.pdf; Input files updated by another job: results/popoolation/plot/D/pop1.D.tsv.gz
+    wildcards: analysis=D, population=pop1
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/D/pop1.D.tsv.gz             --output results/popoolation/plot/D/pop1.D.pdf         2> results/popoolation/plot/D/pop1.D.plot.log
+        
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop1.D.pdf.
+[Wed Jul 12 01:18:17 2023]
+Finished job 1.
+38 of 41 steps (93%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:17 2023]
+rule fst_plot:
+    input: results/fst/plot/1_2.fst.tsv
+    output: results/fst/plot/1_2.pdf
+    log: results/fst/plot/plot_1_2.log
+    jobid: 57
+    benchmark: results/fst/plot/plot_1_2.json
+    reason: Missing output files: results/fst/plot/1_2.pdf; Input files updated by another job: results/fst/plot/1_2.fst.tsv
+    wildcards: pop1=1, pop2=2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/fst/plot/1_2.fst.tsv             --output results/fst/plot/1_2.pdf             --normalize         2> results/fst/plot/plot_1_2.log 1>&2
+        
+Activating conda environment: fst
+[Wed Jul 12 01:18:22 2023]
+Finished job 57.
+39 of 41 steps (95%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:22 2023]
+rule hp_plot_population:
+    input: results/hp/tables/pop1.tsv.gz
+    output: results/hp/plot/pop1.pdf
+    log: results/hp/plot/pop1.log
+    jobid: 51
+    benchmark: results/hp/plot/pop1.json
+    reason: Missing output files: results/hp/plot/pop1.pdf; Input files updated by another job: results/hp/tables/pop1.tsv.gz
+    wildcards: population=pop1
+    resources: tmpdir=/tmp
+
+
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        Rscript src/plot_score.R             --input results/hp/tables/pop1.tsv.gz             --output results/hp/plot/pop1.pdf             --logarithm         2> results/hp/plot/pop1.log
+        
+Activating conda environment: hp
+[Wed Jul 12 01:18:26 2023]
+Finished job 51.
+40 of 41 steps (98%) done
+Select jobs to execute...
+
+[Wed Jul 12 01:18:26 2023]
+localrule all:
+    input: results/popoolation/plot/D/pop1.D.pdf, results/popoolation/plot/D/pop2.D.pdf, results/popoolation/plot/pi/pop1.pi.pdf, results/popoolation/plot/pi/pop2.pi.pdf, results/popoolation/plot/theta/pop1.theta.pdf, results/popoolation/plot/theta/pop2.theta.pdf, results/hp/plot/pop1.pdf, results/hp/plot/pop2.pdf, results/fst/plot/1_2.pdf, results/map/raw/pop1.lib1.stats.tsv, results/map/raw/pop1.lib1.flagstat.txt, results/map/raw/pop1.lib1.idxstats.txt, results/map/raw/pop1.lib2.stats.tsv, results/map/raw/pop1.lib2.flagstat.txt, results/map/raw/pop1.lib2.idxstats.txt, results/map/raw/pop2.lib1.stats.tsv, results/map/raw/pop2.lib1.flagstat.txt, results/map/raw/pop2.lib1.idxstats.txt
+    jobid: 0
+    reason: Input files updated by another job: results/hp/plot/pop2.pdf, results/popoolation/plot/D/pop2.D.pdf, results/popoolation/plot/pi/pop2.pi.pdf, results/popoolation/plot/D/pop1.D.pdf, results/popoolation/plot/theta/pop2.theta.pdf, results/map/raw/pop1.lib2.idxstats.txt, results/map/raw/pop1.lib1.idxstats.txt, results/fst/plot/1_2.pdf, results/popoolation/plot/pi/pop1.pi.pdf, results/hp/plot/pop1.pdf, results/popoolation/plot/theta/pop1.theta.pdf
+    resources: tmpdir=/tmp
+
+[Wed Jul 12 01:18:26 2023]
+Finished job 0.
+41 of 41 steps (100%) done
+Complete log: .snakemake/log/2023-07-12T011228.475203.snakemake.log

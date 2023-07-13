@@ -1,0 +1,109 @@
+all
+clean
+decompress
+fst
+    Make every plot
+fst_merge
+fst_plot
+    Plot pairwise F_ST distributions over a genome
+fst_sliding
+    Compute sliding F_STs in one chromosome.
+
+    Note: fst-sliding requires a true file
+fst_split_table
+    Split fst table into a pair
+hp
+hp_plot_population
+    Plot the genome-wide H_p distribution of a population
+hp_table_population_chromosome
+    Build the hp table for a population in a chromosome.
+index_bam
+    Index a bam file
+index_cram
+    Index a .cram file
+index_fasta
+    Index a .fasta
+map
+map_bwa_index
+    Index with bwa
+map_bwa_map
+    Map population with bowtie2, sort with samtools, compress to cram
+map_filter
+    Remove duplicates from CRAM and filter out sequences.
+
+    samtools view | MarkDuplicates | samtools view -f -F | SortSam
+    samtools view
+
+    Pairs with something unpaired will disappear.
+map_split
+    Extract chromosome in cram
+
+    We use uncompressed bam to accelerate the output. The result of this rule
+    is temporary.
+
+    Note: the following step is picard MarkDuplicates, and needs a proper file
+    since it makes two passes. Output is a bam because MarkDuplicates needs
+    one.
+mpileup
+mpileup_convert
+    Compute the mpileup and compress it
+mpileup_popoolation_filter_indels
+    Filter indels from an mpileup given a GTF files with their coordinates.
+    Compress results.
+
+    Both fifo and fifo.gz will be deleted.
+mpileup_popoolation_identify_indels
+    Get a GTF with the indels present.
+mpileup_popoolation_subsample
+    Perform the subsampling step. Compress results as they are generated
+    through a FIFO
+popoolation
+popoolation_d
+popoolation_merge_snps
+    Merge snps
+popoolation_merge_variance_sliding
+    Merge results across chromosomes
+popoolation_pi
+popoolation_plot
+    Plot a genome-wide result's from variance sliding
+popoolation_theta
+popoolation_variance_sliding
+    Run popoolation's Variance sliding script: Tajima's D, Tajima's Theta or Pi
+qc
+qc_trimmomatic
+    Run trimmomatic on paired end mode
+
+    to eliminate Illumina adaptors andremove low quality regions and reads.
+
+    Inputs _1 and _2 are piped through gzip/pigz.
+    Outputs _1 and _2 are piped to gzip/pigz (level 9).
+    Outputs _3 and _4 are compressed with the builtin compressor from
+    Trimmomatic.
+
+    Further on they are catted and compressed with gzip/pigz (level 1).
+    Sequences will be stored permanently later on on CRAM
+raw_extract_genome
+    Extract the fasta.gz on config.yaml into genome.fa
+raw_make_links_pe
+    Make a link to the original file, with a prettier name than default
+reports
+reports_fastqc
+reports_samtools_flagstat
+reports_samtools_idxstats
+reports_samtools_stats
+sync
+sync_compress
+sync_filter_indels
+    Filter indels from the joint mpileup
+sync_identify_indels
+    Identify indels like in mpileup_popoolation_identify_indels, but all
+    together
+sync_mpileup2sync
+    Convert joint mpileup to sync
+
+    - mpileup2sync returns error always, and that is why there is a || true.
+    - Next step requires a proper file
+sync_subsample
+    Subsample a sync file.
+
+    Note: A proper file is required as input and output.

@@ -1,0 +1,10 @@
+# Environment for generic subworkflow
+name: generic
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - samtools
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/generic
+

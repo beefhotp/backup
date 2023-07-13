@@ -1,0 +1,18 @@
+Using input	/dev/fd/63
+Using output	results/popoolation/tables/theta/pop2.2R.theta.tsv
+Using snp-output	results/popoolation/tables/theta/pop2.2R.theta.snps
+Using fastq-type	sanger
+Using measure	theta
+Using window-size	1000
+Using step-size	1000
+Using min-count	2
+Using min-qual	20
+Using pool-size	200
+Using min-coverage	4
+Using max-coverage	200
+Using min-covered-fraction	0.5
+Using region	
+Using no-discard-deletions	0
+Dissable corrections	0
+Using help	0
+Using test	0

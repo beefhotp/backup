@@ -1,0 +1,48 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                   count    min threads    max threads
+----------------------------------  -------  -------------  -------------
+all                                       1              1              1
+fst_merge                                 1              1              1
+fst_plot                                  1              1              1
+fst_sliding                               1              1              1
+fst_split_table                           1              1              1
+hp_plot_population                        2              1              1
+hp_table_population_chromosome            2              1              1
+popoolation_merge_snps                    2              1              1
+popoolation_merge_variance_sliding        6              1              1
+popoolation_plot                          6              1              1
+popoolation_variance_sliding              5              1              1
+total                                    28              1              1
+
+Select jobs to execute...
+
+[Thu Jul  6 15:13:58 2023]
+rule fst_sliding:
+    input: results/sync/subsampled/2R.sync
+    output: results/fst/tables/2R.tsv, results/fst/tables/2R.tsv.gz
+    log: results/fst/tables/2R.log
+    jobid: 60
+    benchmark: results/fst/tables/2R.json
+    reason: Missing output files: results/fst/tables/2R.tsv
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation2_1201/fst-sliding.pl             --window-size 1             --step-size 1             --suppress-noninformative             --input results/sync/subsampled/2R.sync             --min-covered-fraction 1.0             --min-coverage 4             --max-coverage 200             --min-count 3             --output results/fst/tables/2R.tsv             --pool-size 500:200         2> results/fst/tables/2R.log 1>&2
+        gzip --best --stdout results/fst/tables/2R.tsv 2>> results/fst/tables/2R.log
+        
+Activating conda environment: fst
+Waiting at most 5 seconds for missing files.
+MissingOutputException in rule fst_sliding in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/fst.py, line 37:
+Job 60  completed successfully, but some output files are missing. Missing files after 5 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+results/fst/tables/2R.tsv.gz
+Removing output files of failed job fst_sliding since they might be corrupted:
+results/fst/tables/2R.tsv
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-07-06T151343.686648.snakemake.log

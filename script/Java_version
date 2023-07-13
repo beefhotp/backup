@@ -1,0 +1,10 @@
+#!/bin/bash 
+#$ -cwd
+#$ -N Java_version 
+#$ -o java_version.o
+
+
+. /etc/profile.d/modules.sh
+module load roslin/java/10
+
+java -version

@@ -1,0 +1,9 @@
+Building DAG of jobs...
+InputFunctionException in rule raw_make_links_pe in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/raw.py, line 14:
+Error:
+  IndexError: list index out of range
+Wildcards:
+  population=pop2
+  library=lib2
+Traceback:
+  File "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/raw.py", line 5, in get_reads

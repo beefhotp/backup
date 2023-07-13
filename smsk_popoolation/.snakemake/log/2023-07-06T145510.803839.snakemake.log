@@ -1,0 +1,10 @@
+Building DAG of jobs...
+MissingInputException in rule map_bwa_map in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/map.py, line 29:
+Missing input files for rule map_bwa_map:
+    output: results/map/raw/pop1.lib1.cram
+    wildcards: population=pop1, library=lib1
+    affected files:
+        results/qc/pop1.lib1_4.fq.gz
+        results/qc/pop1.lib1_2.fq.gz
+        results/qc/pop1.lib1_1.fq.gz
+        results/qc/pop1.lib1_3.fq.gz

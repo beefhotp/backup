@@ -1,0 +1,11 @@
+# Environment for map subworkflow
+name: map
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - bwa
+    - samtools
+    - picard
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/map

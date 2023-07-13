@@ -1,0 +1,6 @@
+Using input	/dev/stdin
+Using output	results/sync/filt/2R.gtf
+Using indel-window	5
+Using min-count	5
+Using test	0
+Using help	0

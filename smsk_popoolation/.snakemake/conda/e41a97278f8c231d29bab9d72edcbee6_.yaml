@@ -1,0 +1,11 @@
+# Environment for reports subworkflow
+name: reports
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - fastqc
+    - samtools
+    - picard
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/reports

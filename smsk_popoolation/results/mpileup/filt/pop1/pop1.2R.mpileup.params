@@ -1,0 +1,6 @@
+Using input	/dev/fd/63
+Using output	results/mpileup/filt/pop1/pop1.2R.mpileup
+Using gtf	results/mpileup/filt/pop1/pop1.2R.gtf
+Using discardmode (keep-mode)	1
+Using test	0
+Using help	0

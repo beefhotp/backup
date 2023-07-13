@@ -1,0 +1,182 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+decompress                                 3              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             2              1              1
+index_cram                                 3              1              1
+index_fasta                                1              1              1
+map_bwa_index                              1              1              1
+map_bwa_map                                3              1              1
+map_filter                                 3              1              1
+map_split                                  3              1              1
+mpileup_convert                            2              1              1
+mpileup_popoolation_filter_indels          2              1              1
+mpileup_popoolation_identify_indels        2              1              1
+mpileup_popoolation_subsample              2              1              1
+popoolation_merge_snps                     2              1              1
+popoolation_merge_variance_sliding         6              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               6              1              1
+qc_trimmomatic                             3              1              1
+raw_extract_genome                         1              1              1
+raw_make_links_pe                          3              1              1
+reports_samtools_flagstat                  3              1              1
+reports_samtools_idxstats                  3              1              1
+reports_samtools_stats                     3              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     74              1              1
+
+Select jobs to execute...
+
+[Tue Jul 11 11:52:23 2023]
+rule raw_make_links_pe:
+    input: data/reads/pop1_1.fq.gz, data/reads/pop1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    jobid: 12
+    reason: Missing output files: results/raw/pop1.lib1_2.fq.gz, results/raw/pop1.lib1_1.fq.gz; Updated input files: data/reads/pop1_1.fq.gz, data/reads/pop1_2.fq.gz
+    wildcards: population=pop1, library=lib1
+    resources: tmpdir=/tmp
+
+
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_1.fq.gz) results/raw/pop1.lib1_1.fq.gz
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_2.fq.gz) results/raw/pop1.lib1_2.fq.gz
+        
+[Tue Jul 11 11:52:24 2023]
+Finished job 12.
+1 of 74 steps (1%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:24 2023]
+rule decompress:
+    input: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    jobid: 11
+    reason: Input files updated by another job: results/raw/pop1.lib1_2.fq.gz, results/raw/pop1.lib1_1.fq.gz
+    wildcards: population=pop1, library=lib1
+    resources: tmpdir=/tmp
+
+
+        gzip --decompress --stdout results/raw/pop1.lib1_1.fq.gz > results/raw/pop1.lib1_1.fq
+        gzip --decompress --stdout results/raw/pop1.lib1_2.fq.gz > results/raw/pop1.lib1_2.fq
+        
+[Tue Jul 11 11:52:26 2023]
+Finished job 11.
+2 of 74 steps (3%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:26 2023]
+rule qc_trimmomatic:
+    input: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    output: results/qc/pop1.lib1_1.fq, results/qc/pop1.lib1_2.fq, results/qc/pop1.lib1_3.fq, results/qc/pop1.lib1_4.fq
+    log: results/qc/pop1.lib1.trimmomatic_pe.log
+    jobid: 10
+    benchmark: results/qc/pop1.lib1.trimmomatic_pe.json
+    reason: Missing output files: results/qc/pop1.lib1_1.fq, results/qc/pop1.lib1_2.fq, results/qc/pop1.lib1_4.fq, results/qc/pop1.lib1_3.fq; Input files updated by another job: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    wildcards: population=pop1, library=lib1
+    priority: 50
+    resources: tmpdir=/tmp
+
+
+        trimmomatic PE \
+            -threads 1 \
+            -phred33 \
+            results/raw/pop1.lib1_1.fq results/raw/pop1.lib1_2.fq results/qc/pop1.lib1_1.fq results/qc/pop1.lib1_3.fq results/qc/pop1.lib1_2.fq results/qc/pop1.lib1_4.fq \
+            ILLUMINACLIP:data/adapters/TruSeq3-PE-2.fa:2:30:10 \
+            AVGQUAL:3 MINLEN:31 LEADING:19 TRAILING:19 MINLEN:31 SLIDINGWINDOW:4:5 LEADING:5 TRAILING:5 MINLEN:25 TOPHRED33 \
+        2> results/qc/pop1.lib1.trimmomatic_pe.log 1>&2
+        
+Activating conda environment: qc
+[Tue Jul 11 11:52:35 2023]
+Finished job 10.
+3 of 74 steps (4%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:35 2023]
+rule raw_make_links_pe:
+    input: data/reads/pop2_1.fq.gz, data/reads/pop2_2.fq.gz
+    output: results/raw/pop2.lib1_1.fq.gz, results/raw/pop2.lib1_2.fq.gz
+    jobid: 36
+    reason: Missing output files: results/raw/pop2.lib1_2.fq.gz, results/raw/pop2.lib1_1.fq.gz; Updated input files: data/reads/pop2_1.fq.gz, data/reads/pop2_2.fq.gz
+    wildcards: population=pop2, library=lib1
+    resources: tmpdir=/tmp
+
+
+        ln --symbolic $(readlink --canonicalize data/reads/pop2_1.fq.gz) results/raw/pop2.lib1_1.fq.gz
+        ln --symbolic $(readlink --canonicalize data/reads/pop2_2.fq.gz) results/raw/pop2.lib1_2.fq.gz
+        
+[Tue Jul 11 11:52:35 2023]
+Finished job 36.
+4 of 74 steps (5%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:35 2023]
+rule raw_make_links_pe:
+    input: data/reads/pop1_1.fq.gz, data/reads/pop1_2.fq.gz
+    output: results/raw/pop1.lib2_1.fq.gz, results/raw/pop1.lib2_2.fq.gz
+    jobid: 21
+    reason: Missing output files: results/raw/pop1.lib2_2.fq.gz, results/raw/pop1.lib2_1.fq.gz; Updated input files: data/reads/pop1_1.fq.gz, data/reads/pop1_2.fq.gz
+    wildcards: population=pop1, library=lib2
+    resources: tmpdir=/tmp
+
+
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_1.fq.gz) results/raw/pop1.lib2_1.fq.gz
+        ln --symbolic $(readlink --canonicalize data/reads/pop1_2.fq.gz) results/raw/pop1.lib2_2.fq.gz
+        
+[Tue Jul 11 11:52:35 2023]
+Finished job 21.
+5 of 74 steps (7%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:35 2023]
+rule raw_extract_genome:
+    input: data/genome/2R.fa.gz
+    output: results/raw/genome.fa
+    log: results/raw/genome.log
+    jobid: 14
+    benchmark: results/raw/genome.json
+    reason: Updated input files: data/genome/2R.fa.gz
+    resources: tmpdir=/tmp
+
+gzip --decompress --stdout data/genome/2R.fa.gz > results/raw/genome.fa 2> results/raw/genome.log
+[Tue Jul 11 11:52:35 2023]
+Finished job 14.
+6 of 74 steps (8%) done
+Select jobs to execute...
+
+[Tue Jul 11 11:52:35 2023]
+rule map_bwa_index:
+    input: results/raw/genome.fa
+    output: results/index/genome, results/index/genome.amb, results/index/genome.ann, results/index/genome.bwt, results/index/genome.pac, results/index/genome.sa
+    log: results/index/bwa_index.log
+    jobid: 13
+    benchmark: results/index/bwa_index.json
+    reason: Input files updated by another job: results/raw/genome.fa
+    resources: tmpdir=/tmp
+
+bwa index -p results/index/genome results/raw/genome.fa > results/index/bwa_index.log 2>&1
+Activating conda environment: map
+Touching output file results/index/genome.
+[Tue Jul 11 11:52:37 2023]
+Finished job 13.
+7 of 74 steps (9%) done
+Select jobs to execute...
+ProtectedOutputException in rule map_bwa_map in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_pop_diff_pool_seq/popoolation_snakemake/smsk_popoolation/src/snakefiles/map.py, line 29:
+Write-protected output files for rule map_bwa_map:
+    output: results/map/raw/pop1.lib1.cram
+    wildcards: population=pop1, library=lib1
+    affected files:
+        results/map/raw/pop1.lib1.cram

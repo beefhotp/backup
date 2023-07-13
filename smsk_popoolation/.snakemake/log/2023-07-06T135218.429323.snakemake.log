@@ -1,0 +1,3 @@
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce results/qc/pop2.lib1_1.fq.gz (if you use input functions make sure that they don't raise unexpected exceptions).

@@ -1,0 +1,8 @@
+Using input	/dev/fd/63
+Using output	results/mpileup/sub/pop2/pop2.2R.mpileup
+Using minimum quality	20
+Using maximum coverage	200
+Using subsample method	withoutreplace
+Using fastq-type	sanger
+Using test	0
+Using help	0

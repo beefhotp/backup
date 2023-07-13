@@ -1,0 +1,171 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                   count    min threads    max threads
+----------------------------------  -------  -------------  -------------
+all                                       1              1              1
+fst_merge                                 1              1              1
+fst_plot                                  1              1              1
+fst_sliding                               1              1              1
+fst_split_table                           1              1              1
+hp_plot_population                        2              1              1
+hp_table_population_chromosome            2              1              1
+popoolation_merge_snps                    2              1              1
+popoolation_merge_variance_sliding        6              1              1
+popoolation_plot                          6              1              1
+popoolation_variance_sliding              5              1              1
+total                                    28              1              1
+
+Select jobs to execute...
+
+[Thu Jul  6 15:19:18 2023]
+rule fst_sliding:
+    input: results/sync/subsampled/2R.sync
+    output: results/fst/tables/2R.tsv, results/fst/tables/2R.tsv.gz
+    log: results/fst/tables/2R.log
+    jobid: 60
+    benchmark: results/fst/tables/2R.json
+    reason: Missing output files: results/fst/tables/2R.tsv
+    wildcards: chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation2_1201/fst-sliding.pl             --window-size 1             --step-size 1             --suppress-noninformative             --input results/sync/subsampled/2R.sync             --min-covered-fraction 1.0             --min-coverage 4             --max-coverage 200             --min-count 3             --output results/fst/tables/2R.tsv             --pool-size 500:200         2> results/fst/tables/2R.log 1>&2
+        gzip --best --stdout results/fst/tables/2R.tsv > results/fst/tables/2R.tsv.gz 2>> results/fst/tables/2R.log
+        
+Activating conda environment: fst
+Write-protecting output file results/fst/tables/2R.tsv.gz.
+[Thu Jul  6 15:19:44 2023]
+Finished job 60.
+1 of 28 steps (4%) done
+Removing temporary output results/sync/subsampled/2R.sync.
+Select jobs to execute...
+
+[Thu Jul  6 15:19:44 2023]
+rule fst_merge:
+    input: results/fst/tables/2R.tsv
+    output: results/fst/plot/all.tsv.gz
+    log: results/fst/plot/merge.log
+    jobid: 59
+    benchmark: results/fst/plot/merge.json
+    reason: Missing output files: results/fst/plot/all.tsv.gz; Input files updated by another job: results/fst/tables/2R.tsv
+    resources: tmpdir=/tmp
+
+pigz --best --stdout results/fst/tables/2R.tsv > results/fst/plot/all.tsv.gz
+Activating conda environment: fst
+Write-protecting output file results/fst/plot/all.tsv.gz.
+[Thu Jul  6 15:19:46 2023]
+Finished job 59.
+2 of 28 steps (7%) done
+Removing temporary output results/fst/tables/2R.tsv.
+Select jobs to execute...
+
+[Thu Jul  6 15:19:46 2023]
+rule popoolation_variance_sliding:
+    input: results/mpileup/sub/pop2/pop2.2R.mpileup.gz
+    output: results/popoolation/tables/D/pop2.2R.D.snps, results/popoolation/tables/D/pop2.2R.D.tsv
+    log: results/popoolation/tables/D/pop2.2R.D.log
+    jobid: 27
+    benchmark: results/popoolation/tables/D/pop2.2R.D.json
+    reason: Missing output files: results/popoolation/tables/D/pop2.2R.D.tsv, results/popoolation/tables/D/pop2.2R.D.snps
+    wildcards: analysis=D, population=pop2, chromosome=2R
+    resources: tmpdir=/tmp
+
+
+        perl src/popoolation_1.2.2/Variance-sliding.pl             --measure D             --fastq-type sanger             --min-count 2             --min-coverage 4             --max-coverage 200             --min-covered-fraction 0.5             --pool-size 200             --window-size 1000             --step-size 1000             --input <(gzip --decompress --stdout results/mpileup/sub/pop2/pop2.2R.mpileup.gz)             --output results/popoolation/tables/D/pop2.2R.D.tsv             --snp-output results/popoolation/tables/D/pop2.2R.D.snps         2> results/popoolation/tables/D/pop2.2R.D.log 1>&2
+        
+Activating conda environment: popoolation
+[Thu Jul  6 15:19:54 2023]
+Finished job 27.
+3 of 28 steps (11%) done
+Select jobs to execute...
+
+[Thu Jul  6 15:19:54 2023]
+rule popoolation_merge_snps:
+    input: results/popoolation/tables/D/pop2.2R.D.snps
+    output: results/popoolation/plot/D/pop2.D.snps.gz
+    jobid: 56
+    reason: Missing output files: results/popoolation/plot/D/pop2.D.snps.gz; Input files updated by another job: results/popoolation/tables/D/pop2.2R.D.snps
+    wildcards: analysis=D, population=pop2
+    resources: tmpdir=/tmp
+
+pigz --processes 1 --best --stdout results/popoolation/tables/D/pop2.2R.D.snps > results/popoolation/plot/D/pop2.D.snps.gz
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop2.D.snps.gz.
+[Thu Jul  6 15:19:56 2023]
+Finished job 56.
+4 of 28 steps (14%) done
+Select jobs to execute...
+
+[Thu Jul  6 15:19:56 2023]
+rule popoolation_merge_variance_sliding:
+    input: results/popoolation/tables/D/pop2.2R.D.tsv
+    output: results/popoolation/plot/D/pop2.D.tsv.gz
+    log: results/popoolation/plot/D/pop2.D.merge_vs.log
+    jobid: 26
+    benchmark: results/popoolation/plot/D/pop2.D.merge_vs.json
+    reason: Missing output files: results/popoolation/plot/D/pop2.D.tsv.gz; Input files updated by another job: results/popoolation/tables/D/pop2.2R.D.tsv
+    wildcards: analysis=D, population=pop2
+    resources: tmpdir=/tmp
+
+(bash src/variance_sliding_to_genomic_score.sh results/popoolation/tables/D/pop2.2R.D.tsv | pigz --best --processes 1 > results/popoolation/plot/D/pop2.D.tsv.gz) 2> results/popoolation/plot/D/pop2.D.merge_vs.log
+Activating conda environment: popoolation
+Write-protecting output file results/popoolation/plot/D/pop2.D.tsv.gz.
+[Thu Jul  6 15:19:58 2023]
+Finished job 26.
+5 of 28 steps (18%) done
+Select jobs to execute...
+
+[Thu Jul  6 15:19:58 2023]
+rule hp_table_population_chromosome:
+    input: results/popoolation/plot/D/pop2.D.snps.gz
+    output: results/hp/tables/pop2.tsv.gz
+    log: results/hp/tables/pop2.log
+    jobid: 55
+    benchmark: results/hp/tables/pop2.json
+    reason: Missing output files: results/hp/tables/pop2.tsv.gz; Input files updated by another job: results/popoolation/plot/D/pop2.D.snps.gz
+    wildcards: population=pop2
+    resources: tmpdir=/tmp
+
+(gzip --decompress --stdout results/popoolation/plot/D/pop2.D.snps.gz | python3 src/snps_to_hp.py | pigz --best > results/hp/tables/pop2.tsv.gz) 2> results/hp/tables/pop2.log
+Activating conda environment: hp
+Write-protecting output file results/hp/tables/pop2.tsv.gz.
+[Thu Jul  6 15:20:01 2023]
+Finished job 55.
+6 of 28 steps (21%) done
+Select jobs to execute...
+
+[Thu Jul  6 15:20:01 2023]
+rule hp_plot_population:
+    input: results/hp/tables/pop2.tsv.gz
+    output: results/hp/plot/pop2.pdf
+    log: results/hp/plot/pop2.log
+    jobid: 54
+    benchmark: results/hp/plot/pop2.json
+    reason: Missing output files: results/hp/plot/pop2.pdf; Input files updated by another job: results/hp/tables/pop2.tsv.gz
+    wildcards: population=pop2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/hp/tables/pop2.tsv.gz             --output results/hp/plot/pop2.pdf             --logarithm         2> results/hp/plot/pop2.log
+        
+Activating conda environment: hp
+[Thu Jul  6 15:20:03 2023]
+Error in rule hp_plot_population:
+    jobid: 54
+    input: results/hp/tables/pop2.tsv.gz
+    output: results/hp/plot/pop2.pdf
+    log: results/hp/plot/pop2.log (check log file(s) for error details)
+    conda-env: hp
+    shell:
+        
+        Rscript src/plot_score.R             --input results/hp/tables/pop2.tsv.gz             --output results/hp/plot/pop2.pdf             --logarithm         2> results/hp/plot/pop2.log
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-07-06T151906.459460.snakemake.log

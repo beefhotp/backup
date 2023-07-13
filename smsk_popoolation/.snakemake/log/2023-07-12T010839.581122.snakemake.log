@@ -1,0 +1,66 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             1              1              1
+index_cram                                 2              1              1
+map_filter                                 2              1              1
+map_split                                  2              1              1
+mpileup_convert                            1              1              1
+mpileup_popoolation_filter_indels          1              1              1
+mpileup_popoolation_identify_indels        1              1              1
+mpileup_popoolation_subsample              1              1              1
+popoolation_merge_snps                     1              1              1
+popoolation_merge_variance_sliding         5              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               5              1              1
+reports_samtools_idxstats                  2              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     41              1              1
+
+Select jobs to execute...
+
+[Wed Jul 12 01:08:57 2023]
+rule popoolation_plot:
+    input: results/popoolation/plot/D/pop2.D.tsv.gz
+    output: results/popoolation/plot/D/pop2.D.pdf
+    log: results/popoolation/plot/D/pop2.D.plot.log
+    jobid: 25
+    benchmark: results/popoolation/plot/D/pop2.D.plot.json
+    reason: Missing output files: results/popoolation/plot/D/pop2.D.pdf
+    wildcards: analysis=D, population=pop2
+    resources: tmpdir=/tmp
+
+
+        Rscript src/plot_score.R             --input results/popoolation/plot/D/pop2.D.tsv.gz             --output results/popoolation/plot/D/pop2.D.pdf         2> results/popoolation/plot/D/pop2.D.plot.log
+        
+Activating conda environment: popoolation
+[Wed Jul 12 01:09:03 2023]
+Error in rule popoolation_plot:
+    jobid: 25
+    input: results/popoolation/plot/D/pop2.D.tsv.gz
+    output: results/popoolation/plot/D/pop2.D.pdf
+    log: results/popoolation/plot/D/pop2.D.plot.log (check log file(s) for error details)
+    conda-env: popoolation
+    shell:
+        
+        Rscript src/plot_score.R             --input results/popoolation/plot/D/pop2.D.tsv.gz             --output results/popoolation/plot/D/pop2.D.pdf         2> results/popoolation/plot/D/pop2.D.plot.log
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-07-12T010839.581122.snakemake.log

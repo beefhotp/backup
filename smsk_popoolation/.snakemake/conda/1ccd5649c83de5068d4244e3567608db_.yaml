@@ -1,0 +1,11 @@
+# Environment for sync subworkflow
+name sync
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - perl=5.22.0
+    - pigz
+    - openjdk
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/sync

@@ -1,0 +1,97 @@
+Building DAG of jobs...
+Creating conda environment src/snakefiles/map.yml...
+Downloading and installing remote packages.
+CreateCondaEnvironmentException:
+Could not create conda environment from /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/map.yml:
+Command:
+mamba env create --quiet --file "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/3337ec7827a10d8bf79d65c55ef08abb_.yaml" --prefix "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/3337ec7827a10d8bf79d65c55ef08abb_"
+Output:
+
+# >>>>>>>>>>>>>>>>>>>>>> ERROR REPORT <<<<<<<<<<<<<<<<<<<<<<
+
+    Traceback (most recent call last):
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda/exceptions.py", line 1114, in __call__
+        return func(*args, **kwargs)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/cli/main.py", line 80, in do_call
+        exit_code = getattr(module, func_name)(args, parser)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/cli/main_create.py", line 143, in execute
+        result[installer_type] = installer.install(prefix, pkg_specs, args, env)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/mamba/mamba_env.py", line 55, in mamba_install
+        index = load_channels(pool, channel_urls, repos, prepend=False)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/mamba/utils.py", line 129, in load_channels
+        index = get_index(
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/mamba/utils.py", line 110, in get_index
+        is_downloaded = dlist.download(api.MAMBA_DOWNLOAD_FAILFAST)
+    RuntimeError: filesystem error: cannot set file time: Operation not permitted [/exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/pkgs/cache/ffeee55f.json]
+
+`$ /exports/applications/apps/community/roslin/mamba/1.0/bin/mamba create --quiet --file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/3337ec7827a10d8bf79d65c55ef08abb_.yaml --prefix /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/3337ec7827a10d8bf79d65c55ef08abb_`
+
+  environment variables:
+                 CIO_TEST=<not set>
+  CONDA_AUTO_UPDATE_CONDA=false
+        CONDA_DEFAULT_ENV=HLab_tsinfer
+                CONDA_EXE=/exports/applications/apps/SL7/anaconda/5.3.1/bin/conda
+             CONDA_PREFIX=/exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer
+           CONDA_PREFIX_1=/exports/applications/apps/SL7/anaconda/5.3.1
+    CONDA_PROMPT_MODIFIER=(HLab_tsinfer)
+         CONDA_PYTHON_EXE=/exports/applications/apps/SL7/anaconda/5.3.1/bin/python
+               CONDA_ROOT=/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0
+              CONDA_SHLVL=2
+           CURL_CA_BUNDLE=<not set>
+          LD_LIBRARY_PATH=/exports/applications/gridengine/ge-8.6.5/bin/glnxa64:/exports/applica
+                          tions/gridengine/ge-8.6.5/runtime/glnxa64
+                  MANPATH=/exports/applications/apps/SL7/anaconda/5.0.1/share/man:/exports/appli
+                          cations/gridengine/ge-8.6.5/man
+               MODULEPATH=/exports/applications/modulefiles/SL7/Tools:/exports/applications/modu
+                          lefiles/SL7/Compilers:/exports/applications/modulefiles/SL7/Libraries:
+                          /exports/applications/modulefiles/SL7/Applications:/exports/applicatio
+                          ns/modulefiles/Community:/exports/igmm/software/etc/el7/modules
+                     PATH=/exports/applications/apps/community/roslin/mamba/1.0/bin:/exports/app
+                          lications/apps/SL7/anaconda/5.0.1/bin:/home/s2306096/perl5/bin:/export
+                          s/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer/bin:/e
+                          xports/applications/apps/SL7/anaconda/5.3.1/condabin:/exports/applicat
+                          ions/gridengine/ge-8.6.5/bin/lx-amd64:/exports/applications/apps/SL7/m
+                          odules/5.2.0/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/ho
+                          me/s2306096/.local/bin:/home/s2306096/bin
+           QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+       REQUESTS_CA_BUNDLE=<not set>
+            SSL_CERT_FILE=<not set>
+
+     active environment : HLab_tsinfer
+    active env location : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer
+            shell level : 2
+       user config file : /home/s2306096/.condarc
+ populated config files : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/.condarc
+                          /home/s2306096/.condarc
+          conda version : 4.13.0
+    conda-build version : not installed
+         python version : 3.9.16.final.0
+       virtual packages : __linux=3.10.0=0
+                          __glibc=2.17=0
+                          __unix=0=0
+                          __archspec=1=x86_64
+       base environment : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0  (read only)
+      conda av data dir : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/etc/conda
+  conda av metadata url : None
+           channel URLs : https://conda.anaconda.org/bioconda/linux-64
+                          https://conda.anaconda.org/bioconda/noarch
+                          https://conda.anaconda.org/conda-forge/linux-64
+                          https://conda.anaconda.org/conda-forge/noarch
+                          https://repo.anaconda.com/pkgs/main/linux-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/r/linux-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+          package cache : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/pkgs
+       envs directories : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs
+                          /home/s2306096/.conda/envs
+                          /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/envs
+               platform : linux-64
+             user-agent : conda/4.13.0 requests/2.28.1 CPython/3.9.16 Linux/3.10.0-1160.88.1.el7.x86_64 scientific/7.9 glibc/2.17
+                UID:GID : 2686108:1608220
+             netrc file : None
+           offline mode : False
+
+
+An unexpected error has occurred. Conda has prepared the above report.
+
+

@@ -1,0 +1,124 @@
+Building DAG of jobs...
+Creating conda environment src/snakefiles/sync.yml...
+Downloading and installing remote packages.
+CreateCondaEnvironmentException:
+Could not create conda environment from /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/src/snakefiles/sync.yml:
+Command:
+mamba env create --quiet --file "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/1ccd5649c83de5068d4244e3567608db_.yaml" --prefix "/exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/1ccd5649c83de5068d4244e3567608db_"
+Output:
+
+# >>>>>>>>>>>>>>>>>>>>>> ERROR REPORT <<<<<<<<<<<<<<<<<<<<<<
+
+    Traceback (most recent call last):
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda/exceptions.py", line 1114, in __call__
+        return func(*args, **kwargs)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/cli/main.py", line 80, in do_call
+        exit_code = getattr(module, func_name)(args, parser)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/cli/main_create.py", line 90, in execute
+        spec = specs.detect(name=name, filename=get_filename(args.file), directory=os.getcwd())
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/specs/__init__.py", line 47, in detect
+        if spec.can_handle():
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/specs/yaml_file.py", line 19, in can_handle
+        self._environment = env.from_file(self.filename)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/env.py", line 166, in from_file
+        return from_yaml(yamlstr, filename=filename)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda_env/env.py", line 143, in from_yaml
+        data = yaml_safe_load(yamlstr)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/conda/common/serialize.py", line 60, in yaml_safe_load
+        return yaml.safe_load(string, version="1.2")
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/main.py", line 980, in safe_load
+        return load(stream, SafeLoader, version)
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/main.py", line 935, in load
+        return loader._constructor.get_single_data()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/constructor.py", line 106, in get_single_data
+        node = self.composer.get_single_node()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/composer.py", line 78, in get_single_node
+        document = self.compose_document()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/composer.py", line 104, in compose_document
+        self.parser.get_event()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/parser.py", line 163, in get_event
+        self.current_event = self.state()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/parser.py", line 239, in parse_document_end
+        token = self.scanner.peek_token()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/scanner.py", line 182, in peek_token
+        self.fetch_more_tokens()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/scanner.py", line 282, in fetch_more_tokens
+        return self.fetch_value()
+      File "/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/lib/python3.9/site-packages/ruamel_yaml/scanner.py", line 651, in fetch_value
+        raise ScannerError(
+    ruamel_yaml.scanner.ScannerError: mapping values are not allowed here
+      in "<unicode string>", line 3, column 9:
+        channels:
+                ^ (line: 3)
+
+`$ /exports/applications/apps/community/roslin/mamba/1.0/bin/mamba create --quiet --file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/1ccd5649c83de5068d4244e3567608db_.yaml --prefix /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_line_differentiation/popoolation_snakemake/smsk_popoolation/.snakemake/conda/1ccd5649c83de5068d4244e3567608db_`
+
+  environment variables:
+                 CIO_TEST=<not set>
+  CONDA_AUTO_UPDATE_CONDA=false
+        CONDA_DEFAULT_ENV=HLab_tsinfer
+                CONDA_EXE=/exports/applications/apps/SL7/anaconda/5.3.1/bin/conda
+             CONDA_PREFIX=/exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer
+           CONDA_PREFIX_1=/exports/applications/apps/SL7/anaconda/5.3.1
+    CONDA_PROMPT_MODIFIER=(HLab_tsinfer)
+         CONDA_PYTHON_EXE=/exports/applications/apps/SL7/anaconda/5.3.1/bin/python
+               CONDA_ROOT=/exports/eddie3_apps_local/apps/community/roslin/mamba/1.0
+              CONDA_SHLVL=2
+           CURL_CA_BUNDLE=<not set>
+          LD_LIBRARY_PATH=/exports/applications/gridengine/ge-8.6.5/bin/glnxa64:/exports/applica
+                          tions/gridengine/ge-8.6.5/runtime/glnxa64
+                  MANPATH=/exports/applications/apps/SL7/anaconda/5.0.1/share/man:/exports/appli
+                          cations/gridengine/ge-8.6.5/man
+               MODULEPATH=/exports/applications/modulefiles/SL7/Tools:/exports/applications/modu
+                          lefiles/SL7/Compilers:/exports/applications/modulefiles/SL7/Libraries:
+                          /exports/applications/modulefiles/SL7/Applications:/exports/applicatio
+                          ns/modulefiles/Community:/exports/igmm/software/etc/el7/modules
+                     PATH=/exports/applications/apps/community/roslin/mamba/1.0/bin:/exports/app
+                          lications/apps/SL7/anaconda/5.0.1/bin:/home/s2306096/perl5/bin:/export
+                          s/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer/bin:/e
+                          xports/applications/apps/SL7/anaconda/5.3.1/condabin:/exports/applicat
+                          ions/gridengine/ge-8.6.5/bin/lx-amd64:/exports/applications/apps/SL7/m
+                          odules/5.2.0/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/ho
+                          me/s2306096/.local/bin:/home/s2306096/bin
+           QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+       REQUESTS_CA_BUNDLE=<not set>
+            SSL_CERT_FILE=<not set>
+
+     active environment : HLab_tsinfer
+    active env location : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/HLab_tsinfer
+            shell level : 2
+       user config file : /home/s2306096/.condarc
+ populated config files : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/.condarc
+                          /home/s2306096/.condarc
+          conda version : 4.13.0
+    conda-build version : not installed
+         python version : 3.9.16.final.0
+       virtual packages : __linux=3.10.0=0
+                          __glibc=2.17=0
+                          __unix=0=0
+                          __archspec=1=x86_64
+       base environment : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0  (read only)
+      conda av data dir : /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/etc/conda
+  conda av metadata url : None
+           channel URLs : https://conda.anaconda.org/bioconda/linux-64
+                          https://conda.anaconda.org/bioconda/noarch
+                          https://conda.anaconda.org/conda-forge/linux-64
+                          https://conda.anaconda.org/conda-forge/noarch
+                          https://repo.anaconda.com/pkgs/main/linux-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/r/linux-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+          package cache : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/pkgs
+       envs directories : /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs
+                          /home/s2306096/.conda/envs
+                          /exports/eddie3_apps_local/apps/community/roslin/mamba/1.0/envs
+               platform : linux-64
+             user-agent : conda/4.13.0 requests/2.28.1 CPython/3.9.16 Linux/3.10.0-1160.88.1.el7.x86_64 scientific/7.9 glibc/2.17
+                UID:GID : 2686108:1608220
+             netrc file : None
+           offline mode : False
+
+
+An unexpected error has occurred. Conda has prepared the above report.
+
+

@@ -1,0 +1,6 @@
+Building DAG of jobs...
+MissingInputException in rule raw_extract_genome in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_pop_diff_pool_seq/popoolation_snakemake/smsk_popoolation/src/snakefiles/raw.py, line 28:
+Missing input files for rule raw_extract_genome:
+    output: results/raw/genome.fa
+    affected files:
+        data/genome/2R.fa.gz

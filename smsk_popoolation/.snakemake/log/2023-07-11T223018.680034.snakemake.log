@@ -1,0 +1,8 @@
+Building DAG of jobs...
+MissingInputException in rule raw_make_links_pe in file /exports/cmvm/eddie/eb/groups/HighlanderLab/visitors/yma_bsf_pop_diff_pool_seq/popoolation_snakemake/smsk_popoolation/src/snakefiles/raw.py, line 14:
+Missing input files for rule raw_make_links_pe:
+    output: results/raw/pop1.lib2_1.fq.gz, results/raw/pop1.lib2_2.fq.gz
+    wildcards: population=pop1, library=lib2
+    affected files:
+        data/reads/pop1_2.fq.gz
+        data/reads/pop1_1.fq.gz

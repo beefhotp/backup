@@ -1,0 +1,75 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Singularity containers: ignored
+Job stats:
+job                                    count    min threads    max threads
+-----------------------------------  -------  -------------  -------------
+all                                        1              1              1
+decompress                                 3              1              1
+fst_merge                                  1              1              1
+fst_plot                                   1              1              1
+fst_sliding                                1              1              1
+fst_split_table                            1              1              1
+hp_plot_population                         2              1              1
+hp_table_population_chromosome             2              1              1
+index_cram                                 3              1              1
+index_fasta                                1              1              1
+map_bwa_index                              1              1              1
+map_bwa_map                                3              1              1
+map_filter                                 3              1              1
+map_split                                  3              1              1
+mpileup_convert                            2              1              1
+mpileup_popoolation_filter_indels          2              1              1
+mpileup_popoolation_identify_indels        2              1              1
+mpileup_popoolation_subsample              2              1              1
+popoolation_merge_snps                     2              1              1
+popoolation_merge_variance_sliding         6              1              1
+popoolation_plot                           6              1              1
+popoolation_variance_sliding               6              1              1
+qc_trimmomatic                             3              1              1
+raw_extract_genome                         1              1              1
+raw_make_links_pe                          2              1              1
+reports_samtools_flagstat                  3              1              1
+reports_samtools_idxstats                  3              1              1
+reports_samtools_stats                     3              1              1
+sync_filter_indels                         1              1              1
+sync_identify_indels                       1              1              1
+sync_mpileup2sync                          1              1              1
+sync_subsample                             1              1              1
+total                                     73              1              1
+
+Select jobs to execute...
+
+[Tue Jul 11 23:53:26 2023]
+rule decompress:
+    input: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    jobid: 11
+    reason: Code has changed since last execution
+    wildcards: population=pop1, library=lib1
+    resources: tmpdir=/tmp
+
+
+        gzip -d results/raw/pop1.lib1_1.fq.gz > results/raw/pop1.lib1_1.fq
+        gzip -d results/raw/pop1.lib1_2.fq.gz > results/raw/pop1.lib1_2.fq
+        
+[Tue Jul 11 23:53:26 2023]
+Error in rule decompress:
+    jobid: 11
+    input: results/raw/pop1.lib1_1.fq.gz, results/raw/pop1.lib1_2.fq.gz
+    output: results/raw/pop1.lib1_1.fq, results/raw/pop1.lib1_2.fq
+    shell:
+        
+        gzip -d results/raw/pop1.lib1_1.fq.gz > results/raw/pop1.lib1_1.fq
+        gzip -d results/raw/pop1.lib1_2.fq.gz > results/raw/pop1.lib1_2.fq
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job decompress since they might be corrupted:
+results/raw/pop1.lib1_1.fq
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-07-11T235323.250032.snakemake.log

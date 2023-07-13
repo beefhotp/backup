@@ -1,0 +1,10 @@
+# Environment for qc subworkflow
+name: qc
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - trimmomatic
+    - gzip  # gzip should be installed
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/qc

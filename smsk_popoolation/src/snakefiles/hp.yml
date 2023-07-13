@@ -1,0 +1,14 @@
+# Environment for hp subworkflow
+name:hp
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - python>=3.5
+    - pigz
+    - r-tidyverse
+    - r-argparse
+    - readline
+    - numpy
+prefix: /exports/cmvm/eddie/eb/groups/HighlanderLab/anaconda/envs/hp
